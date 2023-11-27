@@ -1,41 +1,23 @@
+// app.js
 const express = require('express');
-const app = express();
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const supermercadoRoutes = require('./routes/supermercadoRoutes');
+const carritoRoutes = require('./routes/carritoRoutes');
 
-/* Xf96neTTU8eT3VEf  PASS DB*/
 
-// Middleware
+const app = express();
+const port = 3000;
 app.use(cors());
+mongoose.connect('mongodb+srv://ramiro053:fU1BaZ3oLIwSsVFj@gestordeprecios.gwughqe.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true });
+
+
 app.use(bodyParser.json());
 
+app.use('/supermercadosRoutes', supermercadoRoutes);
+app.use('/carritosRoutes', carritoRoutes);
 
-mongoose.connect('mongodb+srv://RRamiS:Xf96neTTU8eT3VEf@preciosdinamicos.vxdklfn.mongodb.net/', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-});
-
-const db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'Connection error:'));
-db.once('open', () => {
-  console.log('Connected to the database');
-});
-
-
-// Rutas de autenticación y gestión de supermercados y productos
-const authRoutes = require('./routes/auth');
-const supermarketRoutes = require('./routes/supermarkets');
-const productRoutes = require('./routes/products');
-
-app.use('/api/auth', authRoutes);
-app.use('/api/supermarkets', supermarketRoutes);
-app.use('/api/products', productRoutes);
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Servidor corriendo en http://localhost:${port}`);
 });
