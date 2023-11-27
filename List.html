@@ -4,65 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparador de Precios</title>
+    <link rel="stylesheet" href="styles.css">
+  
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
-    <header class="bg-primary text-white py-3">
-        <div class="container">
-            <h1>Comparador de Precios</h1>
-            <a href="index.html" class="btn btn-light">Inicio</a>
-        </div>
-    </header>
 
-    <div class="container mt-4">
+
+  </head>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+      <img src="Gestor de precios.png" width="125" height="125" class="d-inline-block align-top" alt="" style="margin-left: 15px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Inicio <span class="sr-only"></span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contacto</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+<body>
+    <div class="container">
         <h2>Seleccione sus productos</h2>
         <form id="productosForm">
-            <!-- Aquí deberías generar dinámicamente las opciones basadas en los productos de tu base de datos -->
+            <ul>
+            <li>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="cocacola" name="productos" value="Coca Cola">
                 <label class="form-check-label" for="cocacola">Coca Cola</label>
             </div>
+          </li>
+          <li>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="pepsi" name="productos" value="Pepsi">
                 <label class="form-check-label" for="pepsi">Pepsi</label>
             </div>
+          </li>
+          <li>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="papitas" name="productos" value="Papitas">
                 <label class="form-check-label" for="papitas">Papitas</label>
             </div>
+          </li>
+          <li>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="banana" name="productos" value="Banana(KG)">
                 <label class="form-check-label" for="banana">Banana(KG)</label>
             </div>
+          </li>
+          <li>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="speed" name="productos" value="Speed">
                 <label class="form-check-label" for="speed">Speed</label>
             </div>
+          </li>
+          <li>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="galletas" name="productos" value="Galletas">
                 <label class="form-check-label" for="galletas">Galletas</label>
             </div>
+          </li>
+          <li>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="manzana" name="productos" value="Manzana(KG)">
                 <label class="form-check-label" for="manzana">Manzana(KG)</label>
             </div>
+          </li>
+          <li>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="helado" name="productos" value="Helado">
                 <label class="form-check-label" for="helado">Helado</label>
             </div>
+          </li>
+          <li>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="carne" name="productos" value="Carne">
                 <label class="form-check-label" for="carne">Carne</label>
             </div>
+          </li>
+          <li>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="monster" name="productos" value="Monster">
                 <label class="form-check-label" for="monster">Monster</label>
             </div>
-            <!-- Agrega más opciones según sea necesario -->
-
-            <button type="button" class="btn btn-primary mt-3" onclick="compararPrecios()">Comparar Precios</button>
+          </li>
+          </ul>
+            <button type="button" class="btn btn-primary mt-3" onclick="compararPrecios()">Comparar Precios</button>   
+         
         </form>
+   
     </div>
 
     <div id="resultados" class="container mt-4">
