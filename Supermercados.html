@@ -80,14 +80,22 @@
     </div>
 
     <script>
-        const supermercados = [
-            'Supermercado A',
-            'Supermercado B',
-            'Supermercado C',
-            // Agrega más supermercados según sea necesario
-        ];
-        function generarListaSupermercados() {
+        // Función para obtener la lista de supermercados desde el backend
+        async function obtenerSupermercados() {
+            try {
+                const response = await fetch('/supermercados'); // Ruta a ajustar según tu configuración
+                const supermercados = await response.json();
+                return supermercados.map(supermercado => supermercado.nombre);
+            } catch (error) {
+                console.error('Error al obtener la lista de supermercados:', error);
+                return [];
+            }
+        }
+
+        // Función para generar dinámicamente la lista de supermercados
+        async function generarListaSupermercados() {
             const supermercadosLista = document.getElementById('supermercadosLista');
+            const supermercados = await obtenerSupermercados();
 
             supermercados.forEach(supermercado => {
                 const supermercadoItem = document.createElement('li');
@@ -106,16 +114,14 @@
         generarListaSupermercados(); // Llama a la función para generar la lista al cargar la página
 
         function mostrarProductos(supermercado) {
-            // Aquí deberías realizar una solicitud al backend para obtener los productos y precios del supermercado seleccionado
-            // Luego, utiliza la función mostrarResultados(resultados) para mostrar la información en la sección de resultados
-            // Por ejemplo:
+            // Lógica para mostrar productos según el supermercado seleccionado
             const resultadosElement = document.getElementById('resultados');
             resultadosElement.innerHTML = `<p>Mostrando productos de ${supermercado}</p>`;
             // Realiza la solicitud al backend y llama a mostrarResultados con la información obtenida
         }
 
         function mostrarResultados(resultados) {
-            // Esta función sigue siendo la misma que antes, solo necesitas ajustarla según la información del supermercado seleccionado
+            // Función para mostrar resultados, sigue siendo la misma que antes
             const resultadosElement = document.getElementById('resultados');
             resultadosElement.innerHTML = '';
 
