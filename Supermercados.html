@@ -83,7 +83,7 @@
         // Función para obtener la lista de supermercados desde el backend
         async function obtenerSupermercados() {
             try {
-                const response = await fetch('/supermercadosRoutes'); // Ruta a ajustar según tu configuración
+                const response = await fetch('https://precioempresariales.onrender.com/supermercadosRoutes'); // Ruta a ajustar según tu configuración
                 const supermercados = await response.json();
                 return supermercados.map(supermercado => supermercado.nombre);
             } catch (error) {
