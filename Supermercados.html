@@ -120,6 +120,38 @@
             // Realiza la solicitud al backend y llama a mostrarResultados con la información obtenida
         }
 
+        function mostrarProductos(supermercado) {
+        // Realiza la solicitud al backend para obtener los productos del supermercado seleccionado
+        fetch(`/supermercados/${supermercado}`)
+            .then(response => response.json())
+            .then(productos => {
+                mostrarResultadosProductos(supermercado, productos);
+            })
+            .catch(error => console.error('Error al obtener productos:', error));
+    }
+
+    function mostrarResultadosProductos(supermercado, productos) {
+        const resultadosElement = document.getElementById('resultados');
+        resultadosElement.innerHTML = `<p>Mostrando productos de ${supermercado}</p>`;
+
+        if (productos && productos.length > 0) {
+            const listaProductos = document.createElement('ul');
+            listaProductos.className = 'list-group';
+
+            productos.forEach(producto => {
+                const productoItem = document.createElement('li');
+                productoItem.className = 'list-group-item';
+                productoItem.textContent = `${producto.nombre}: ${producto.precio}`;
+                listaProductos.appendChild(productoItem);
+            });
+
+            resultadosElement.appendChild(listaProductos);
+        } else {
+            const mensajeError = document.createElement('p');
+            mensajeError.textContent = 'No se encontraron productos para este supermercado.';
+            resultadosElement.appendChild(mensajeError);
+        }
+    }
         function mostrarResultados(resultados) {
             // Función para mostrar resultados, sigue siendo la misma que antes
             const resultadosElement = document.getElementById('resultados');
