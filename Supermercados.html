@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparador de Precios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            padding-top: 56px; /* Altura del navbar */
+        }
+
+        header {
+            transition: background-color 0.3s;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-item a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-item a:hover {
+            color: #28a745; /* Color verde de Bootstrap */
+        }
+
+        .supermercados-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .supermercado-item {
+            margin-bottom: 10px;
+        }
+
+        .supermercado-item a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .supermercado-item a:hover {
+            color: #28a745; /* Color verde de Bootstrap */
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-primary text-white py-3 fixed-top">
+        <div class="container">
+            <nav class="navbar">
+                <span class="navbar-title">Gestor de Precios</span>
+                <a class="nav-item" href="index.html">Inicio</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container mt-4">
+        <h2>Lista de Supermercados</h2>
+        <ul class="supermercados-list" id="supermercadosLista">
+            <!-- Los elementos de la lista se agregarán aquí dinámicamente -->
+        </ul>
+    </div>
+
+    <div id="resultados" class="container mt-4">
+        <!-- Los resultados de la comparación se mostrarán aquí -->
+    </div>
+
+    <script>
+        function generarListaSupermercados() {
+            const supermercadosLista = document.getElementById('supermercadosLista');
+
+            supermercados.forEach(supermercado => {
+                const supermercadoItem = document.createElement('li');
+                supermercadoItem.className = 'supermercado-item';
+
+                const supermercadoLink = document.createElement('a');
+                supermercadoLink.href = '#';
+                supermercadoLink.textContent = supermercado;
+                supermercadoLink.onclick = () => mostrarProductos(supermercado);
+
+                supermercadoItem.appendChild(supermercadoLink);
+                supermercadosLista.appendChild(supermercadoItem);
+            });
+        }
+
+        generarListaSupermercados(); // Llama a la función para generar la lista al cargar la página
+
+        function mostrarProductos(supermercado) {
+            // Aquí deberías realizar una solicitud al backend para obtener los productos y precios del supermercado seleccionado
+            // Luego, utiliza la función mostrarResultados(resultados) para mostrar la información en la sección de resultados
+            // Por ejemplo:
+            const resultadosElement = document.getElementById('resultados');
+            resultadosElement.innerHTML = `<p>Mostrando productos de ${supermercado}</p>`;
+            // Realiza la solicitud al backend y llama a mostrarResultados con la información obtenida
+        }
+
+        function mostrarResultados(resultados) {
+            // Esta función sigue siendo la misma que antes, solo necesitas ajustarla según la información del supermercado seleccionado
+            const resultadosElement = document.getElementById('resultados');
+            resultadosElement.innerHTML = '';
+
+            console.log('Datos de resultados:', resultados);
+
+            // Mostrar el supermercado más barato en general
+            const resultadoSupermercado = document.createElement('p');
+            resultadoSupermercado.textContent = resultados.supermercadoMasBarato
+                ? `El supermercado más barato en general es: ${resultados.supermercadoMasBarato.nombre}`
+                : 'No se encontraron supermercados.';
+            resultadosElement.appendChild(resultadoSupermercado);
+
+            // Mostrar los precios por producto en cada supermercado
+            if (resultados.preciosIndividuales && Object.keys(resultados.preciosIndividuales).length > 0) {
+                const tablaPrecios = document.createElement('table');
+                tablaPrecios.className = 'table mt-3';
+
+                // Obtener la lista de supermercados desde los precios individuales
+                const supermercados = Object.values(resultados.preciosIndividuales[Object.keys(resultados.preciosIndividuales)[0]])
+                    .map(precioEnSupermercado => precioEnSupermercado.supermercado);
+
+                tablaPrecios.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            ${supermercados.map(supermercado => `<th>${supermercado}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.keys(resultados.preciosIndividuales).map(producto => `
+                            <tr>
+                                <td>${producto}</td>
+                                ${supermercados.map(supermercado => {
+                                    const preciosEnSupermercado = resultados.preciosIndividuales[producto];
+                                    console.log('Precios en supermercado:', preciosEnSupermercado);
+                                    const precioEnSupermercado = preciosEnSupermercado.find(p => p.supermercado === supermercado);
+                                    const precio = precioEnSupermercado ? precioEnSupermercado.precio : 'No disponible';
+                                    return `<td>${precio}</td>`;
+                                }).join('')}
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                `;
+                resultadosElement.appendChild(tablaPrecios);
+            } else {
+                const mensajeError = document.createElement('p');
+                mensajeError.textContent = 'No se encontraron datos individuales.';
+                resultadosElement.appendChild(mensajeError);
+            }
+        }
+    </script>
+</body>
+</html>
