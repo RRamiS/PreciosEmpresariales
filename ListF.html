@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparador de Precios</title>
+    <link rel="stylesheet" href="styles.css">
+  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+      <img src="Gestor de precios.png" width="125" height="125" class="d-inline-block align-top" alt="" style="margin-left: 15px">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="index.html">Inicio <span class="sr-only"></span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="contacto.html">Contacto</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="Farmacias.html">Farmacias</a>
+        </li>
+      </ul>
+    </div>
+</nav>
+
+<body>
+    <div class="container">
+        <h2>Seleccione sus productos</h2>
+        <form id="productosForm">
+            <ul>
+                <li>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="tafirol" name="productos" value="Tafirol">
+                        <label class="form-check-label" for="tafirol">Tafirol</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="ibuprofeno" name="productos" value="Ibuprofeno">
+                        <label class="form-check-label" for="ibuprofeno">Ibuprofeno</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="keterolac" name="productos" value="Keterolac">
+                        <label class="form-check-label" for="keterolac">Keterolac</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="actron" name="productos" value="Actron">
+                        <label class="form-check-label" for="actron">Actron</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="adermicina" name="productos" value="Adermicina">
+                        <label class="form-check-label" for="adermicina">Adermicina</label>
+                    </div>
+                </li>
+            </ul>
+            <button type="button" class="btn btn-primary mt-3" onclick="compararPrecios()">Comparar Precios</button>
+        </form>
+    </div>
+
+    <div id="resultados" class="container mt-4">
+
+    </div>
+
+    <script>
+        function compararPrecios() {
+            const productosForm = document.getElementById('productosForm');
+            const seleccionados = Array.from(productosForm.productos).filter(producto => producto.checked).map(producto => producto.value);
+
+            const resultadosElement = document.getElementById('resultados');
+            resultadosElement.innerHTML = '';
+
+            fetch('https://precioempresariales.onrender.com/carritosFarmacia/comparar-precios', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productos: seleccionados }),
+            })
+            .then(response => response.json())
+            .then(resultados => {
+                mostrarResultados(resultados);
+            })
+            .catch(error => console.error('Error al comparar precios:', error));
+        }
+
+        function mostrarResultados(resultados) {
+            const resultadosElement = document.getElementById('resultados');
+            resultadosElement.innerHTML = '';
+
+            console.log('Datos de resultados:', resultados);
+
+            const resultadoFarmacia = document.createElement('p');
+            resultadoFarmacia.textContent = resultados.farmaciaMasBarata
+                ? `La farmacia más barata en general es: ${resultados.farmaciaMasBarata.nombre}`
+                : 'No se encontraron farmacias.';
+            resultadosElement.appendChild(resultadoFarmacia);
+
+            if (resultados.preciosIndividuales && Object.keys(resultados.preciosIndividuales).length > 0) {
+                const tablaPrecios = document.createElement('table');
+                tablaPrecios.className = 'table mt-3';
+
+                const farmacias = Object.values(resultados.preciosIndividuales[Object.keys(resultados.preciosIndividuales)[0]])
+                    .map(precioEnFarmacia => precioEnFarmacia.farmacia);
+
+                tablaPrecios.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            ${farmacias.map(farmacia => `<th>${farmacia}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.keys(resultados.preciosIndividuales).map(producto => `
+                            <tr>
+                                <td>${producto}</td>
+                                ${farmacias.map(farmacia => {
+                                    const preciosEnFarmacia = resultados.preciosIndividuales[producto];
+                                    console.log('Precios en farmacia:', preciosEnFarmacia);
+                                    const precioEnFarmacia = preciosEnFarmacia.find(p => p.farmacia === farmacia);
+                                    const precio = precioEnFarmacia ? precioEnFarmacia.precio : 'No disponible';
+                                    return `<td>${precio}</td>`;
+                                }).join('')}
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                `;
+                resultadosElement.appendChild(tablaPrecios);
+            } else {
+                const mensajeError = document.createElement('p');
+                mensajeError.textContent = 'No se encontraron datos individuales.';
+                resultadosElement.appendChild(mensajeError);
+            }
+        }
+    </script>
+</body>
+</html>
