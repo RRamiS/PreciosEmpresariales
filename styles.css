@@ -1,16 +1,31 @@
 .navbar__icon-social img {
     width: 20px !important;
   }
-
+@media (max-width: 768px) {
+      .container {
+          width: 100% !important;
+      }
+  
+      ul li {
+          width: 100% !important;
+      }
+  
+      ul li label {
+          padding: 2px !important;
+          font-size: 1.2em !important;
+      }
+  }
   @import url('https://fonts.googleapis.com/css?family=Lato') ;
-
+ 
+  
+  
 body{
   height: 100% !important;
   background: #222222b9 !important;
   font-family: 'Lato', sans-serif !important;
 }
 
-.container{
+/* .container{
   display: block !important;
   position: relative !important;
   margin: 10px auto !important;
@@ -18,7 +33,7 @@ body{
   width: 800px !important;
   padding: 10px !important;
 }
-
+ */
 h2 {
   color: #AAAAAA !important;
 }
