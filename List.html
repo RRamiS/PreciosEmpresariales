@@ -28,7 +28,10 @@
           <a class="nav-link" href="contacto.html">Contacto</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="Supermercados.html">Supermercados</a>
+          <a class="nav-link" href="List.html">Supermercados</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="ListF.html">Farmacias</a>
         </li>
       </ul>
     </div>
@@ -106,11 +109,11 @@
     </div>
 
     <div id="resultados" class="container mt-4">
-        <!-- Los resultados de la comparación se mostrarán aquí -->
+
     </div>
 
     <script>
-        // Suponiendo que tienes la información de productos desde el backend
+
 
         function compararPrecios() {
             const productosForm = document.getElementById('productosForm');
@@ -119,8 +122,7 @@
             const resultadosElement = document.getElementById('resultados');
             resultadosElement.innerHTML = '';
 
-            // Aquí deberías realizar una solicitud al backend para obtener los precios de los supermercados y comparar
-            // Puedes usar fetch() para realizar peticiones al backend
+
             fetch('https://precioempresariales.onrender.com/carritosRoutes/comparar-precios', {
                 method: 'POST',
                 headers: {
@@ -140,19 +142,19 @@
 
   console.log('Datos de resultados:', resultados);
 
-  // Mostrar el supermercado más barato en general
+
   const resultadoSupermercado = document.createElement('p');
   resultadoSupermercado.textContent = resultados.supermercadoMasBarato
     ? `El supermercado más barato en general es: ${resultados.supermercadoMasBarato.nombre}`
     : 'No se encontraron supermercados.';
   resultadosElement.appendChild(resultadoSupermercado);
 
-  // Mostrar los precios por producto en cada supermercado
+
   if (resultados.preciosIndividuales && Object.keys(resultados.preciosIndividuales).length > 0) {
     const tablaPrecios = document.createElement('table');
     tablaPrecios.className = 'table mt-3';
 
-    // Obtener la lista de supermercados desde los precios individuales
+
     const supermercados = Object.values(resultados.preciosIndividuales[Object.keys(resultados.preciosIndividuales)[0]])
       .map(precioEnSupermercado => precioEnSupermercado.supermercado);
 
